@@ -14,7 +14,7 @@ export interface AIAnalysis {
 
 // Simple deterministic analysis for demo mode
 export function analyzeDailyLogDemo(log: DailyLog): AIAnalysis {
-  const risks = []
+  const risks: AIAnalysis['risks'] = []
   
   // Calculate completion percentage
   const completionPct = log.plannedQty > 0 ? (log.actualQty / log.plannedQty) * 100 : 0
@@ -151,19 +151,8 @@ export async function analyzeWithGemini(log: DailyLog): Promise<AIAnalysis> {
 
 // Main analysis function that chooses mode based on API key availability
 export async function analyzeDailyLog(log: DailyLog): Promise<AIAnalysis> {
-  const apiKey = import.meta.env.GEMINI_API_KEY
-  
-  // If API key is available, use real Gemini (in production this would be backend call)
-  // For security, we keep AI calls server-side only
-  if (apiKey && apiKey.trim() !== '') {
-    try {
-      return await analyzeWithGemini(log)
-    } catch (error) {
-      console.warn('Gemini API failed, falling back to demo mode:', error)
-      return analyzeDailyLogDemo(log)
-    }
-  } else {
-    // Demo mode - clearly labeled
-    return analyzeDailyLogDemo(log)
-  }
+  // PoC mode: server-side Gemini call is not implemented in this client-side build.
+  // The secure architecture design is: frontend → /api/analyze → Gemini → validated response.
+  // For this PoC submission, deterministic Demo AI Mode is always active (no secret in frontend).
+  return analyzeDailyLogDemo(log)
 }

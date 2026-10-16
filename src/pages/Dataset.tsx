@@ -1,49 +1,115 @@
+import { DEMO_DEFECT_FIXTURES } from '../utils/defectAnalysisService'
+
 function DatasetPage() {
   return (
     <div>
       <div className="page-header">
-        <h1 className="page-title">PoC Dataset</h1>
-        <p className="page-subtitle">Synthetic illustrative dataset description</p>
+        <h1 className="page-title">Dataset Provenance, Schema & Evaluation Methodology</h1>
+        <p className="page-subtitle">
+          Transparent documentation of inspection datasets, synthetic fixtures, and engineering standards.
+        </p>
       </div>
 
-      <div className="docs-content">
-        <h2>Dataset Description</h2>
-        <p>
-          <strong>Source:</strong> Synthetic demo dataset created for PoC validation
-        </p>
-        <p>
-          <strong>Purpose:</strong> Illustrate how structured site information can be converted into management-ready operational insights for the JIEOS Infrastructure Operations Copilot.
-        </p>
-        <p>
-          <strong>Project:</strong> Pune–Nashik Highway Improvement Project (Illustrative)
-        </p>
-        <p>
-          <strong>Records:</strong> 8 site daily logs, 6 material tracker entries, 6 issues, 5 critical risk items
+      <div className="alert alert-info" style={{ marginBottom: '1.25rem' }}>
+        <strong>Data Authenticity Guarantee:</strong> In strict compliance with Rodic InfraAI Challenge guidelines, all records in this proof-of-concept are explicitly identified as curated synthetic fixtures. No confidential proprietary data is claimed or used without authorization.
+      </div>
+
+      <div className="grid-2">
+        <div className="card">
+          <div className="card-header">
+            <div className="card-title">Dataset Overview & Provenance</div>
+          </div>
+          <table className="data-table">
+            <tbody>
+              <tr>
+                <td style={{ fontWeight: 600 }}>Dataset Name</td>
+                <td>JIEOS-InfraAI Road Inspection & Defect Dataset (v1.0-synthetic)</td>
+              </tr>
+              <tr>
+                <td style={{ fontWeight: 600 }}>Provenance & Source</td>
+                <td>Curated synthetic field observations modeled on Indian Roads Congress (IRC) road condition survey guidelines (IRC SP:19 & IRC 35:2015).</td>
+              </tr>
+              <tr>
+                <td style={{ fontWeight: 600 }}>License</td>
+                <td>Creative Commons Attribution 4.0 International (CC-BY-4.0)</td>
+              </tr>
+              <tr>
+                <td style={{ fontWeight: 600 }}>Road Corridor</td>
+                <td>Pune–Nashik Highway Improvement Project (NH-60 Package II, Km 40+000 to Km 85+000)</td>
+              </tr>
+              <tr>
+                <td style={{ fontWeight: 600 }}>Total Records</td>
+                <td>3 Road Inspection events, 5+ Photographic Defect Findings, 8 Daily Site Logs, 6 Material Items, 6 Operational Issues</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <div className="card">
+          <div className="card-header">
+            <div className="card-title">Defect Categories & Reference Standards</div>
+          </div>
+          <ul style={{ paddingLeft: '1.25rem', fontSize: '0.85rem', color: '#334155', lineHeight: 1.8 }}>
+            <li><strong>Potholes:</strong> Cavities exceeding 75mm depth with sub-base exposure (IRC 82:2015 criteria for emergency intervention).</li>
+            <li><strong>Cracking:</strong> Longitudinal and fatigue alligator cracking patterns along vehicle wheelpaths.</li>
+            <li><strong>Rutting / Surface Deformation:</strong> Permanent wheelpath depressions exceeding 20mm depth under heavy commercial vehicle loads.</li>
+            <li><strong>Waterlogging / Drainage Distress:</strong> Carriageway ponding caused by blocked transverse drainage chutes and shoulder camber failure.</li>
+            <li><strong>Damaged / Faded Markings:</strong> Thermoplastic delineation below IRC 35:2015 retroreflectivity threshold (100 mcd/m²/lux).</li>
+            <li><strong>Inconclusive / Ambiguous:</strong> Low-lighting or blurred captures explicitly identified as requiring re-survey.</li>
+          </ul>
+        </div>
+      </div>
+
+      {/* Curated Demo Defect Fixtures Table */}
+      <div className="card" style={{ marginTop: '1.25rem' }}>
+        <div className="card-header">
+          <div className="card-title">Curated Defect Fixtures (Demo AI Mode Mappings)</div>
+        </div>
+        <p style={{ fontSize: '0.85rem', color: 'var(--color-text-muted)', marginBottom: '1rem' }}>
+          When running in Demo AI Mode, uploaded images and descriptions match against deterministic fixtures to ensure reproducible jury evaluation without hidden API rate limits.
         </p>
 
-        <h3>Fields / Features</h3>
-        <ul>
-          <li><strong>Activity information:</strong> Type, chainage, planned and actual quantities</li>
-          <li><strong>Quantities:</strong> Actual vs planned for productivity tracking</li>
-          <li><strong>Manpower & equipment:</strong> Resource visibility per activity</li>
-          <li><strong>Materials:</strong> Consumption tracking with variance detection</li>
-          <li><strong>Issues:</strong> Description, location, category, severity, owner, action</li>
-          <li><strong>Progress:</strong> Overall and daily progress percentages</li>
-          <li><strong>Location / chainage:</strong> Chainage format (Km X+Y – Km Z+W)</li>
-        </ul>
-
-        <h3>Data Integrity Note</h3>
-        <p>
-          All data in this dataset is synthetic and clearly labeled as illustrative. No government datasets, no company proprietary data, and no personal information are included. This dataset is designed solely for demonstration purposes for the Rodic InfraAI Innovation Challenge 2026.
-        </p>
-
-        <h3>Structure</h3>
-        <ul>
-          <li>Daily logs: Activity, chainage, planned/actual quantity, manpower, equipment, material, weather, remarks, issues</li>
-          <li>Materials: Material name, planned quantity, consumed quantity, unit, variance, status (Critical/Over/Under/On Plan)</li>
-          <li>Issues: Issue text, location, category, severity (Low/Medium/High/Critical), status (Open/In Progress/Resolved), owner, due date, recommended action</li>
-          <li>Risks: Category, description, severity, impact, recommended action</li>
-        </ul>
+        <div style={{ overflowX: 'auto' }}>
+          <table className="data-table">
+            <thead>
+              <tr>
+                <th>Fixture ID</th>
+                <th>Defect Name</th>
+                <th>Category</th>
+                <th>Severity</th>
+                <th>Qualitative Uncertainty</th>
+                <th>Visual Sample</th>
+                <th>Recommended Action</th>
+              </tr>
+            </thead>
+            <tbody>
+              {DEMO_DEFECT_FIXTURES.map(fixture => (
+                <tr key={fixture.fixtureId}>
+                  <td style={{ fontFamily: 'monospace', fontWeight: 600 }}>{fixture.fixtureId}</td>
+                  <td>{fixture.name}</td>
+                  <td>{fixture.category}</td>
+                  <td>
+                    <span className="severity-badge" style={{
+                      background: fixture.severity === 'Critical' ? '#fee2e2' : fixture.severity === 'High' ? '#ffedd5' : '#f1f5f9',
+                      color: fixture.severity === 'Critical' ? '#dc2626' : fixture.severity === 'High' ? '#ea580c' : '#475569'
+                    }}>
+                      {fixture.severity}
+                    </span>
+                  </td>
+                  <td style={{ fontSize: '0.8rem', color: 'var(--color-text-muted)' }}>{fixture.uncertainty}</td>
+                  <td>
+                    <img
+                      src={fixture.svgThumbnail}
+                      alt={fixture.name}
+                      style={{ width: '60px', height: '40px', objectFit: 'cover', borderRadius: '3px', border: '1px solid var(--color-border)' }}
+                    />
+                  </td>
+                  <td style={{ fontSize: '0.8rem' }}>{fixture.recommendedAction}</td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
       </div>
     </div>
   )

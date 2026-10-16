@@ -280,3 +280,418 @@ export function calculateTodaysProgress(logs: DailyLog[]): number {
   const actual = todayLogs.reduce((s, l) => s + l.actualQty, 0)
   return planned > 0 ? Math.round((actual / planned) * 100) : 0
 }
+
+import {
+  RoadInspection,
+  Finding,
+  ProjectInfo
+} from '../types'
+import { DEMO_DEFECT_FIXTURES } from './defectAnalysisService'
+
+export const DEMO_PROJECT_INFO: ProjectInfo = {
+  id: 'prj-pune-nashik-2026',
+  name: 'Pune–Nashik Highway Improvement Project (NH-60)',
+  identifier: 'NH60-MAH-PKG2',
+  roadPackage: 'Package II (Km 40+000 to Km 85+000)',
+  relevantSegments: ['Km 40+000 – Km 50+000 (Chakan Bypass)', 'Km 50+000 – Km 65+000 (Rajgurunagar)', 'Km 65+000 – Km 85+000 (Manchar-Alephata)'],
+  client: 'National Highways Authority of India (NHAI)',
+  location: 'Maharashtra, India',
+  startDate: '2025-01-15',
+  endDate: '2026-12-31',
+  plannedProgress: 72,
+  reportedProgress: 68,
+  lengthKm: 45,
+  totalInspections: 3,
+  openFindingsCount: 4,
+  highPriorityAwaitingReviewCount: 1,
+  overdueActionsCount: 1
+}
+
+export const INITIAL_FINDINGS: Finding[] = [
+  {
+    id: 'fnd-101',
+    inspectionId: 'insp-001',
+    chainage: 'Km 42+620',
+    chainageKm: 42.62,
+    segmentLane: 'Right Carriageway (Outer Lane)',
+    category: 'Cracking',
+    visualEvidence: {
+      id: 'ev-101',
+      url: DEMO_DEFECT_FIXTURES[1].svgThumbnail,
+      filename: 'site_photo_km42_620_crack.jpg',
+      sizeBytes: 2450000,
+      mimeType: 'image/jpeg',
+      uploadedAt: '2026-09-10T10:15:00Z',
+      caption: 'Fatigue cracking network on asphalt wearing course'
+    },
+    severity: 'High',
+    uncertainty: 'Low (High Confidence)',
+    explanation: 'Interconnected longitudinal fatigue cracking (alligator cracking pattern) along outer wheel path indicating structural fatigue of bituminous layer.',
+    recommendedAction: 'Crack sealing with polymer-modified bitumen emulsion; monitor deflection via Falling Weight Deflectometer (FWD).',
+    humanReviewStatus: 'Confirmed',
+    humanReview: {
+      reviewerName: 'Er. Rajesh Kulkarni (Quality Engineer)',
+      reviewedAt: '2026-09-10T14:30:00Z',
+      originalCategory: 'Cracking',
+      finalCategory: 'Cracking',
+      originalSeverity: 'High',
+      finalSeverity: 'High',
+      engineeringNotes: 'Confirmed alligator cracking pattern. Depth does not penetrate WMM base yet. Sealing required before monsoon precipitation.',
+      decision: 'Confirmed'
+    },
+    correctiveAction: {
+      id: 'act-101',
+      findingId: 'fnd-101',
+      title: 'Seal fatigue cracks with polymer-modified emulsion at Km 42+620',
+      priority: 'High',
+      assignedTo: 'Road Maintenance Crew Alpha (Site Eng. S. Patil)',
+      targetDate: '2026-09-18',
+      status: 'Action Assigned',
+      updatedAt: '2026-09-10T15:00:00Z'
+    },
+    auditTrail: [
+      {
+        timestamp: '2026-09-10T10:15:00Z',
+        actor: 'JIEOS Vision Engine (Demo Mode)',
+        action: 'AI Candidate Finding Flagged',
+        details: 'Initial detection: Cracking (High severity, Low uncertainty).'
+      },
+      {
+        timestamp: '2026-09-10T14:30:00Z',
+        actor: 'Er. Rajesh Kulkarni (Quality Engineer)',
+        action: 'Human Review - Confirmed',
+        details: 'Confirmed severity High. Assigned to Maintenance Crew Alpha.'
+      }
+    ]
+  },
+  {
+    id: 'fnd-102',
+    inspectionId: 'insp-001',
+    chainage: 'Km 43+150',
+    chainageKm: 43.15,
+    segmentLane: 'Right Carriageway (Shoulder Edge)',
+    category: 'Potholes',
+    visualEvidence: {
+      id: 'ev-102',
+      url: DEMO_DEFECT_FIXTURES[0].svgThumbnail,
+      filename: 'site_photo_km43_150_pothole.jpg',
+      sizeBytes: 3120000,
+      mimeType: 'image/jpeg',
+      uploadedAt: '2026-09-10T10:45:00Z',
+      caption: 'Severe pothole with subgrade exposure at shoulder edge'
+    },
+    severity: 'Critical',
+    uncertainty: 'Low (High Confidence)',
+    explanation: 'Localized bowl-shaped pavement depression exceeding 75mm depth with subgrade exposure. High risk of vehicle tire blowout or suspension damage.',
+    recommendedAction: 'Immediate temporary cold-mix patch within 24h; mill and hot-mix asphalt rectification scheduled under traffic diversion.',
+    humanReviewStatus: 'Confirmed',
+    humanReview: {
+      reviewerName: 'Er. Rajesh Kulkarni (Quality Engineer)',
+      reviewedAt: '2026-09-10T14:35:00Z',
+      originalCategory: 'Potholes',
+      finalCategory: 'Potholes',
+      originalSeverity: 'Critical',
+      finalSeverity: 'Critical',
+      engineeringNotes: 'Critical hazard on high-speed corridor. Dispatched emergency maintenance team with cold-mix patching materials.',
+      decision: 'Confirmed'
+    },
+    correctiveAction: {
+      id: 'act-102',
+      findingId: 'fnd-102',
+      title: 'Emergency cold-mix patch & subsequent hot-mix asphalt inlay at Km 43+150',
+      priority: 'Critical',
+      assignedTo: 'Emergency Rapid Response Unit (Foreman M. Shinde)',
+      targetDate: '2026-09-11',
+      status: 'In Progress',
+      resolutionNotes: 'Temporary cold mix patch installed on 2026-09-10 18:00. Permanent milling and DBM/BC inlay scheduled for night shift.',
+      updatedAt: '2026-09-10T18:30:00Z'
+    },
+    auditTrail: [
+      {
+        timestamp: '2026-09-10T10:45:00Z',
+        actor: 'JIEOS Vision Engine (Demo Mode)',
+        action: 'AI Candidate Finding Flagged',
+        details: 'Initial detection: Potholes (Critical severity, Low uncertainty).'
+      },
+      {
+        timestamp: '2026-09-10T14:35:00Z',
+        actor: 'Er. Rajesh Kulkarni (Quality Engineer)',
+        action: 'Human Review - Confirmed',
+        details: 'Severity Critical accepted. Emergency response dispatched.'
+      },
+      {
+        timestamp: '2026-09-10T18:30:00Z',
+        actor: 'Foreman M. Shinde',
+        action: 'Status Update',
+        details: 'Temporary cold-mix patch applied. Action marked In Progress.'
+      }
+    ]
+  },
+  {
+    id: 'fnd-103',
+    inspectionId: 'insp-002',
+    chainage: 'Km 44+300',
+    chainageKm: 44.30,
+    segmentLane: 'Left Carriageway (Drain Side)',
+    category: 'Waterlogging',
+    visualEvidence: {
+      id: 'ev-103',
+      url: DEMO_DEFECT_FIXTURES[3].svgThumbnail,
+      filename: 'site_photo_km44_300_waterlog.jpg',
+      sizeBytes: 1980000,
+      mimeType: 'image/jpeg',
+      uploadedAt: '2026-09-09T11:20:00Z',
+      caption: 'Shoulder water ponding and blocked side chute'
+    },
+    severity: 'Medium',
+    uncertainty: 'Moderate',
+    explanation: 'Storm water retention on carriageway edge due to blocked transverse drainage chute and uncompacted earthen shoulder slope.',
+    recommendedAction: 'Clear debris from concrete side-drain and regrade earthen shoulder slope to 3% outward camber.',
+    humanReviewStatus: 'Awaiting Review',
+    auditTrail: [
+      {
+        timestamp: '2026-09-09T11:20:00Z',
+        actor: 'JIEOS Vision Engine (Demo Mode)',
+        action: 'AI Candidate Finding Flagged',
+        details: 'Initial detection: Waterlogging (Medium severity, Moderate uncertainty). Awaiting human review.'
+      }
+    ]
+  },
+  {
+    id: 'fnd-104',
+    inspectionId: 'insp-002',
+    chainage: 'Km 44+850',
+    chainageKm: 44.85,
+    segmentLane: 'Left Carriageway (Inner Lane)',
+    category: 'Surface deformation or rutting',
+    visualEvidence: {
+      id: 'ev-104',
+      url: DEMO_DEFECT_FIXTURES[2].svgThumbnail,
+      filename: 'site_photo_km44_850_rutting.jpg',
+      sizeBytes: 2890000,
+      mimeType: 'image/jpeg',
+      uploadedAt: '2026-09-09T12:00:00Z',
+      caption: 'Wheelpath rutting (22mm measured depth)'
+    },
+    severity: 'High',
+    uncertainty: 'Moderate',
+    explanation: 'Longitudinal surface depression along heavy vehicle wheel tracks with slight lateral shoving. Depth approximately 22mm.',
+    recommendedAction: 'Verify binder course stability; check axle load compliance; schedule surface profiling/micro-surfacing.',
+    humanReviewStatus: 'Confirmed',
+    humanReview: {
+      reviewerName: 'Er. Rajesh Kulkarni (Quality Engineer)',
+      reviewedAt: '2026-09-09T15:10:00Z',
+      originalCategory: 'Surface deformation or rutting',
+      finalCategory: 'Surface deformation or rutting',
+      originalSeverity: 'High',
+      finalSeverity: 'High',
+      engineeringNotes: 'Straightedge test confirmed 22mm rut. Micro-surfacing executed under preventive maintenance schedule.',
+      decision: 'Confirmed'
+    },
+    correctiveAction: {
+      id: 'act-104',
+      findingId: 'fnd-104',
+      title: 'Micro-surfacing surface profiling at Km 44+850',
+      priority: 'High',
+      assignedTo: 'Specialized Surfacing Team (Eng. A. Deshmukh)',
+      targetDate: '2026-09-14',
+      status: 'Verified Closed',
+      resolutionNotes: 'Micro-surfacing completed on 2026-09-13. Residual rut depth under 4mm. Straightedge test verified.',
+      verifiedBy: 'Er. Rajesh Kulkarni (Quality Engineer)',
+      verifiedAt: '2026-09-14T09:00:00Z',
+      updatedAt: '2026-09-14T09:00:00Z'
+    },
+    auditTrail: [
+      {
+        timestamp: '2026-09-09T12:00:00Z',
+        actor: 'JIEOS Vision Engine (Demo Mode)',
+        action: 'AI Candidate Finding Flagged',
+        details: 'Initial detection: Surface deformation or rutting (High severity).'
+      },
+      {
+        timestamp: '2026-09-09T15:10:00Z',
+        actor: 'Er. Rajesh Kulkarni (Quality Engineer)',
+        action: 'Human Review - Confirmed',
+        details: 'Confirmed and scheduled for micro-surfacing.'
+      },
+      {
+        timestamp: '2026-09-14T09:00:00Z',
+        actor: 'Er. Rajesh Kulkarni (Quality Engineer)',
+        action: 'Action Verified Closed',
+        details: 'Post-rectification inspection passed. Status verified closed.'
+      }
+    ]
+  },
+  {
+    id: 'fnd-105',
+    inspectionId: 'insp-003',
+    chainage: 'Km 46+200',
+    chainageKm: 46.20,
+    segmentLane: 'Center Median Delineation',
+    category: 'Damaged or faded road markings',
+    visualEvidence: {
+      id: 'ev-105',
+      url: DEMO_DEFECT_FIXTURES[4].svgThumbnail,
+      filename: 'site_photo_km46_200_markings.jpg',
+      sizeBytes: 1650000,
+      mimeType: 'image/jpeg',
+      uploadedAt: '2026-09-08T16:00:00Z',
+      caption: 'Thermoplastic center lane delineation worn below retroreflective threshold'
+    },
+    severity: 'Low',
+    uncertainty: 'Low (High Confidence)',
+    explanation: 'Center lane delineation line retroreflectivity severely degraded below IRC 35:2015 threshold (below 100 mcd/m²/lux).',
+    recommendedAction: 'Repaint thermoplastic road markings with retroreflective glass beads within next maintenance window.',
+    humanReviewStatus: 'Corrected',
+    humanReview: {
+      reviewerName: 'Er. Rajesh Kulkarni (Quality Engineer)',
+      reviewedAt: '2026-09-08T18:00:00Z',
+      originalCategory: 'Damaged or faded road markings',
+      finalCategory: 'Damaged or faded road markings',
+      originalSeverity: 'Medium',
+      finalSeverity: 'Low',
+      engineeringNotes: 'Adjusted severity to Low because street lighting along this bypass section provides sufficient nighttime visibility until next painting campaign.',
+      decision: 'Severity Changed'
+    },
+    correctiveAction: {
+      id: 'act-105',
+      findingId: 'fnd-105',
+      title: 'Thermoplastic repaint at Km 46+200 to Km 47+000',
+      priority: 'Low',
+      assignedTo: 'Road Safety & Furniture Contractor',
+      targetDate: '2026-09-25',
+      status: 'Action Assigned',
+      updatedAt: '2026-09-08T18:30:00Z'
+    },
+    auditTrail: [
+      {
+        timestamp: '2026-09-08T16:00:00Z',
+        actor: 'JIEOS Vision Engine (Demo Mode)',
+        action: 'AI Candidate Finding Flagged',
+        details: 'Initial detection: Damaged or faded road markings (Medium severity).'
+      },
+      {
+        timestamp: '2026-09-08T18:00:00Z',
+        actor: 'Er. Rajesh Kulkarni (Quality Engineer)',
+        action: 'Human Review - Severity Corrected',
+        details: 'Severity changed from Medium to Low with engineering justification.'
+      }
+    ]
+  }
+]
+
+export const DEMO_ROAD_INSPECTIONS: RoadInspection[] = [
+  {
+    id: 'insp-001',
+    projectId: 'prj-pune-nashik-2026',
+    roadPackage: 'Package II (Km 40+000 to Km 85+000)',
+    chainageStart: 'Km 42+500',
+    chainageEnd: 'Km 43+500',
+    chainageStartKm: 42.5,
+    chainageEndKm: 43.5,
+    roadSegment: 'Km 40+000 – Km 50+000 (Chakan Bypass)',
+    lane: 'Right Carriageway (Both Lanes)',
+    date: '2026-09-10',
+    time: '10:00',
+    gpsCoordinates: { lat: 18.7523, lng: 73.8564 },
+    weather: 'Sunny, 32°C',
+    surfaceCondition: 'Dry, asphalt wearing course under traffic',
+    inspectorName: 'Er. Sneha Verma (Site Engineer)',
+    description: 'Routine post-monsoon pavement condition survey along Chakan bypass section.',
+    evidenceAssets: [INITIAL_FINDINGS[0].visualEvidence, INITIAL_FINDINGS[1].visualEvidence],
+    findings: [INITIAL_FINDINGS[0], INITIAL_FINDINGS[1]],
+    createdAt: '2026-09-10T10:15:00Z'
+  },
+  {
+    id: 'insp-002',
+    projectId: 'prj-pune-nashik-2026',
+    roadPackage: 'Package II (Km 40+000 to Km 85+000)',
+    chainageStart: 'Km 44+100',
+    chainageEnd: 'Km 45+000',
+    chainageStartKm: 44.1,
+    chainageEndKm: 45.0,
+    roadSegment: 'Km 40+000 – Km 50+000 (Chakan Bypass)',
+    lane: 'Left Carriageway (Drain Side & Inner Lane)',
+    date: '2026-09-09',
+    time: '11:00',
+    gpsCoordinates: { lat: 18.7611, lng: 73.8619 },
+    weather: 'Cloudy, 28°C',
+    surfaceCondition: 'Damp shoulder, dry carriageway',
+    inspectorName: 'Er. Sneha Verma (Site Engineer)',
+    description: 'Post-shower drainage and surface distress inspection.',
+    evidenceAssets: [INITIAL_FINDINGS[2].visualEvidence, INITIAL_FINDINGS[3].visualEvidence],
+    findings: [INITIAL_FINDINGS[2], INITIAL_FINDINGS[3]],
+    createdAt: '2026-09-09T11:20:00Z'
+  },
+  {
+    id: 'insp-003',
+    projectId: 'prj-pune-nashik-2026',
+    roadPackage: 'Package II (Km 40+000 to Km 85+000)',
+    chainageStart: 'Km 46+000',
+    chainageEnd: 'Km 47+000',
+    chainageStartKm: 46.0,
+    chainageEndKm: 47.0,
+    roadSegment: 'Km 40+000 – Km 50+000 (Chakan Bypass)',
+    lane: 'Median & Dual Lanes',
+    date: '2026-09-08',
+    time: '15:30',
+    gpsCoordinates: { lat: 18.7754, lng: 73.8712 },
+    weather: 'Sunny, 30°C',
+    surfaceCondition: 'Dry',
+    inspectorName: 'Er. Amit Sharma (Junior Engineer)',
+    description: 'Road furniture, signboards, and thermoplastic marking compliance survey.',
+    evidenceAssets: [INITIAL_FINDINGS[4].visualEvidence],
+    findings: [INITIAL_FINDINGS[4]],
+    createdAt: '2026-09-08T16:00:00Z'
+  }
+]
+
+export function exportFindingsToCSV(findings: Finding[], project: typeof DEMO_PROJECT): string {
+  const headers = [
+    'Finding ID',
+    'Project',
+    'Road Package',
+    'Chainage',
+    'Segment/Lane',
+    'Defect Category',
+    'Severity',
+    'Uncertainty Rating',
+    'Review Status',
+    'Reviewer Decision',
+    'Reviewer Name',
+    'Corrective Action',
+    'Action Priority',
+    'Assigned To',
+    'Action Status',
+    'Target Completion Date',
+    'Evidence Filename',
+    'Engineering Notes'
+  ]
+
+  const rows = findings.map(f => {
+    const r = f.humanReview
+    const a = f.correctiveAction
+    return [
+      `"${f.id}"`,
+      `"${project.name}"`,
+      `"${project.chainageStart} to ${project.chainageEnd}"`,
+      `"${f.chainage}"`,
+      `"${f.segmentLane}"`,
+      `"${f.category}"`,
+      `"${f.severity}"`,
+      `"${f.uncertainty}"`,
+      `"${f.humanReviewStatus}"`,
+      `"${r?.decision || 'Pending Review'}"`,
+      `"${r?.reviewerName || 'Unassigned'}"`,
+      `"${(a?.title || f.recommendedAction || '').replace(/"/g, '""')}"`,
+      `"${a?.priority || f.severity}"`,
+      `"${a?.assignedTo || 'Unassigned'}"`,
+      `"${a?.status || 'Awaiting Review'}"`,
+      `"${a?.targetDate || 'TBD'}"`,
+      `"${f.visualEvidence?.filename || 'N/A'}"`,
+      `"${(r?.engineeringNotes || f.explanation || '').replace(/"/g, '""')}"`
+    ].join(',')
+  })
+
+  return [headers.join(','), ...rows].join('\r\n')
+}
